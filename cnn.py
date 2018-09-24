@@ -1,9 +1,5 @@
 """
-CNN: each convolution neuron looks at a specific area of the image (i.e. receives
-input from a section of previous layer), and as the layers increase, the area
-expands
-
-padding: adding zeros around image so the edge points can still fit in filter
+CNN 
 """
 
 import tensorflow as tf 
