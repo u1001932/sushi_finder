@@ -1,5 +1,5 @@
 """
-CNN 
+CNN for binary classification
 """
 
 import tensorflow as tf 
