@@ -18,9 +18,7 @@ for path in paths:
         im = cv2.imread(os.getcwd() + path+ filename, cv2.IMREAD_COLOR)
         if im is not None: 
              if not (im.shape[0]==150 and im.shape[1]==150 and im.shape[2]==3):
-               print("size mis-match")
-               break;
-               """
+               
                if (im.shape[0] > 150):
                        im = im[im.shape[0]//2-75:im.shape[0]//2+75, ]
                if (im.shape[1] > 150):
@@ -28,8 +26,7 @@ for path in paths:
                if (im.shape[0] < 150 or im.shape[1] < 150 or im.shape[2] <3):
                        zeros = np.zeros((150,150,3))
                        zeros[:im.shape[0], :im.shape[1], im.shape[2]] = im
-                       im = zeros    
-               """        
+                       im = zeros          
              num_pics+=1
              for o in im.flatten():
                  X.append(o)
@@ -41,12 +38,22 @@ for path in paths:
              print(f"{filename} processed")
                             
         else:
-            print("Nonetype detected")                
+            print("Nonetype detected")
+            
+# image interpolation as data augmentation 
+def interpolation(multiplier=1):
+    for i in range(multiplier*num_pics):
+        ratio = np.random.randint(0,1)
+        rand_index_1 = np.random.randint(0,num_pics)
+        rand_index_2 = np.random.randint(0,num_pics)
+        new_image_x = np.add(ratio * X[rand_index_1], (1-ratio) * X[rand_index_2])
+        new_image_y = np.add(ratio * y[rand_index_1], (1-ratio) * y[rand_index_2])
+        num_pics+=1
+        X.append(new_image_x)
+        y.append(new_image_y)
 
 X = np.array(X).reshape((num_pics,150,150,3))
 y = np.array(y).reshape((-1,1))
-from sklearn.preprocessing import OneHotEncoder
-
 
 def shuffle_in_unison(a, b):
     assert len(a) == len(b)
